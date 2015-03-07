@@ -162,7 +162,7 @@ class Iterable {
         if( $unsubscribed_channel_ids ) $request[ 'unsubscribedChannelIds' ] = $unsubscribed_channel_ids;
         if( $unsubscribed_message_type_ids ) $request[ 'unsubscribedMessageTypeIds' ] = $unsubscribed_message_type_ids;
         if( $campaign_id ) $request[ 'campaignId' ] = $campaign_id;
-        if( $template_it ) $request[ 'templateId' ] = $template_id;
+        if( $template_id ) $request[ 'templateId' ] = $template_id;
 
         $result = $this->send_request( 'users/updateSubscriptions', json_encode( $request ), 'POST' );
         return $result;
