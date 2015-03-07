@@ -31,10 +31,12 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $user = $this->iterable->user( 'test@example.com' );
         $this->assertTrue( $user[ 'success' ] );
 
-        foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
-            $response = $this->iterable->list_unsubscribe( $list_id,
-                array( array( 'email' => $user[ 'content' ][ 'email' ] ) ) );
-            $this->assertTrue( $response[ 'success' ] );
+        if( $user[ 'success' ] ) {
+            foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
+                $response = $this->iterable->list_unsubscribe( $list_id,
+                    array( array( 'email' => $user[ 'content' ][ 'email' ] ) ) );
+                $this->assertTrue( $response[ 'success' ] );
+            }
         }
     }
 

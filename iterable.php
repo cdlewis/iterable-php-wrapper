@@ -74,7 +74,7 @@ class Iterable {
     public function lists() {
         $result = $this->send_request( 'lists' );
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = array_map( get_object_vars, $result[ 'content' ]->lists );
+            $result[ 'content' ] = array_map( 'get_object_vars', $result[ 'content' ]->lists );
         }
 
         return $result;
