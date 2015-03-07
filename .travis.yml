@@ -12,12 +12,12 @@ env:
         secure: "KsZ87L3slkuaiDdBR6UngTLwlu2FKH4STXZwnYqZ+oVSuA7mf3DtjSDBYi2cCWy75odnDfMozV+ryvnROD6Z/i/ferb7VXfKQkD9jC49KYhGLL2KBvEj+heXGZQOOSHH8mVonKDGaD4X0kiJlIyoNrJQeYZt0RKtOxDqDSfvaMk="
 
 before_script:
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev --no-interaction
+    - curl -s http://getcomposer.org/installer | php
+    - php composer.phar install --dev --no-interaction
 
 script:
-  - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist
+    - mkdir -p build/logs
+    - php vendor/bin/phpunit -c phpunit.xml.dist
 
 after_script:
-  - php vendor/bin/coveralls
+    - php vendor/bin/coveralls -v
