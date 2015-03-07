@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Iterable PHP Wrapper Test Suite">
+            <file>./iterableTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
