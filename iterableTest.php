@@ -32,6 +32,13 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( $user[ 'success' ] );
 
         if( $user[ 'success' ] ) {
+            // make sure the user is actually subscribed to a list
+            $list_exists = isset( $user[ 'content' ][ 'emailListIds' ] );
+            $this->assertTrue( $list_exists );
+            if( !$list_exists ) {
+                break;
+            }
+
             foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
                 $response = $this->iterable->list_unsubscribe( $list_id,
                     array( array( 'email' => $user[ 'content' ][ 'email' ] ) ) );
