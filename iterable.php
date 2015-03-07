@@ -9,17 +9,26 @@ class Iterable {
     private $api_url = 'https://api.iterable.com:443/api/';
     private $debug = false;
 
+    private function set_optionals( &$array, $values ) {
+        foreach( $values as $key => $value ) {
+            if( $value ) {
+                $array[ $key ] = $value;
+            }
+        }
+    }
+
     private function query_string( $query ) {
         $query_array = array();
 
-            foreach( $query as $key => $key_value ) {
-                $query_array[] = urlencode( $key ) . '=' . urlencode( $key_value );
-            }
+        foreach( $query as $key => $value ) {
+            $query_array[] = urlencode( $key ) . '=' . urlencode( $value );
+        }
 
         return implode( '&', $query_array );
     }
 
-    private function send_request( $resource, $params = array(), $request = 'GET' ) {
+    private function send_request( $resource, $params = array(),
+        $request = 'GET' ) {
         $curl_handle = curl_init();
 
         $url = $this->api_url . $resource . '?api_key=' . $this->api_key;
@@ -50,7 +59,8 @@ class Iterable {
         }
 
         $result = array(
-            'response_code' => curl_getinfo( $curl_handle, CURLINFO_HTTP_CODE ),
+            'response_code' => curl_getinfo( $curl_handle,
+                CURLINFO_HTTP_CODE ),
         );
 
         if( $result[ 'response_code' ] === 200 ) {
@@ -74,36 +84,38 @@ class Iterable {
     public function lists() {
         $result = $this->send_request( 'lists' );
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = array_map( 'get_object_vars', $result[ 'content' ]->lists );
+            $result[ 'content' ] = array_map( 'get_object_vars',
+                $result[ 'content' ]->lists );
         }
 
         return $result;
     }
 
-    public function list_subscribe( $list_id, $subscribers, $resubscribe = false ) {
+    public function list_subscribe( $list_id, $subscribers,
+        $resubscribe = false ) {
         $body = array(
             'listId' => (int) $list_id,
             'subscribers' => $subscribers,
             'resubscribe' => $resubscribe
         );
-        return $this->send_request( 'lists/subscribe', json_encode( $body ), 'POST' );
+        return $this->send_request( 'lists/subscribe',
+            json_encode( $body ), 'POST' );
     }
 
-    public function list_unsubscribe( $list_id, $subscribers, $campaign_id = false, $channel_unsubscribe = false ) {
+    public function list_unsubscribe( $list_id, $subscribers,
+        $campaign_id = false, $channel_unsubscribe = false ) {
         $request = array(
             'listId' => (int) $list_id,
             'subscribers' => $subscribers,
         );
 
-        // optionals
-        if( $campaign_id ) {
-            $request[ 'campaignId' ] = $campaign_id;
-        }
-        if( $channel_unsubscribe ) {
-            $request[ 'channelUnsubscribe' ] = $channel_unsubscribe;
-        }
+        $this->set_optionals( $request, array(
+            'campaignId' => $campaign_id,
+            'channelUnsubscribe' => $channel_unsubscribe
+        ) );
 
-        return $this->send_request( 'lists/unsubscribe', json_encode( $request ), 'POST' );
+        return $this->send_request( 'lists/unsubscribe',
+            json_encode( $request ), 'POST' );
     }
 
     /* Events */
@@ -124,7 +136,8 @@ class Iterable {
         ) ), 'POST' );
 
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = get_object_vars( $result[ 'content' ]->user->dataFields );
+            $result[ 'content' ] = get_object_vars(
+                $result[ 'content' ]->user->dataFields );
         }
 
         return $result;
@@ -138,7 +151,8 @@ class Iterable {
     }
 
     public function user_update_email( $current_email, $new_email ) {
-        $result = $this->send_request( 'users/updateEmail', json_encode( array(
+        $result = $this->send_request( 'users/updateEmail',
+            json_encode( array(
             'currentEmail' => $current_email,
             'newEmail' => $new_email
         ) ), 'POST' );
@@ -146,33 +160,38 @@ class Iterable {
     }
 
     public function user_bulk_update( $users ) {
-        $result = $this->send_request( 'users/bulkUpdate', json_encode( array(
+        $result = $this->send_request( 'users/bulkUpdate',
+            json_encode( array(
             'users' => $users
         ) ), 'POST' );
         return $result;
     }
 
-    public function user_update_subscriptions( $email, $email_list_ids = false, $unsubscribed_channel_ids = false, $unsubscribed_message_type_ids = false, $campaign_id = false, $template_id = false ) {
-        $request = array(
-            'email' => $email
-        );
+    public function user_update_subscriptions( $email,
+        $email_list_ids = false, $unsub_channel_ids = false,
+        $unsub_message_ids = false, $campaign_id = false,
+        $template_id = false ) {
 
-        // optional arguments
-        if( $email_list_ids ) $request[ 'emailListIds' ] = $email_list_ids;
-        if( $unsubscribed_channel_ids ) $request[ 'unsubscribedChannelIds' ] = $unsubscribed_channel_ids;
-        if( $unsubscribed_message_type_ids ) $request[ 'unsubscribedMessageTypeIds' ] = $unsubscribed_message_type_ids;
-        if( $campaign_id ) $request[ 'campaignId' ] = $campaign_id;
-        if( $template_id ) $request[ 'templateId' ] = $template_id;
+        $request = array( 'email' => $email );
 
-        $result = $this->send_request( 'users/updateSubscriptions', json_encode( $request ), 'POST' );
-        return $result;
+        $this->set_optionals( $request, array(
+            'emailListIds' => $email_list_ids,
+            'unsubscribedChannelIds' => $unsub_channel_ids,
+            'unsubscribedMessageTypeIds' => $unsub_message_ids,
+            'campaignId' => $campaign_id,
+            'templateId' => $template_id
+        ) );
+
+        return $this->send_request( 'users/updateSubscriptions',
+            json_encode( $request ), 'POST' );
     }
 
     public function user_fields() {
         $result = $this->send_request( 'users/getFields' );
 
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = array_keys( get_object_vars( $result[ 'content' ]->fields ) );
+            $result[ 'content' ] = array_keys( get_object_vars(
+                $result[ 'content' ]->fields ) );
         }
 
         return $result;
@@ -195,7 +214,8 @@ class Iterable {
 
     /* Commerce */
 
-    public function commerce_track_purchase( $user, $items, $campaign_id = false, $template_id = false, $data_fields = false ) {
+    public function commerce_track_purchase( $user, $items,
+        $campaign_id = false, $template_id = false, $data_fields = false ) {
         throw new Exception( 'Not yet implemented' );
     }
 
@@ -205,7 +225,8 @@ class Iterable {
 
     /* Email */
 
-    public function email( $campaign_id, $recipient, $send_at = false, $inline_css = false, $attachments = false ) {
+    public function email( $campaign_id, $recipient, $send_at = false,
+        $inline_css = false, $attachments = false ) {
         throw new Exception( 'Not yet implemented' );
     }
 

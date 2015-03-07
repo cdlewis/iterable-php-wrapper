@@ -21,8 +21,10 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( $lists[ 'success' ] );
 
         if( count( $lists[ 'content' ] ) > 0 ) {
-            $result = $this->iterable->list_subscribe( $lists[ 'content' ][ 0 ][ 'id' ],
-                array( array( 'email' => 'test@example.com' ) ) );
+            $result = $this->iterable->list_subscribe(
+                $lists[ 'content' ][ 0 ][ 'id' ],
+                array( array( 'email' => 'test@example.com' ) )
+            );
             $this->assertTrue( $result[ 'success' ] );
         }
     }
@@ -41,7 +43,8 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
             foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
                 $response = $this->iterable->list_unsubscribe( $list_id,
-                    array( array( 'email' => $user[ 'content' ][ 'email' ] ) ) );
+                    array( array(
+                        'email' => $user[ 'content' ][ 'email' ] ) ) );
                 $this->assertTrue( $response[ 'success' ] );
             }
         }
