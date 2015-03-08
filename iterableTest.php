@@ -100,4 +100,29 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $response = $this->iterable->user_update_subscriptions( $email );
         $this->assertTrue( $response[ 'success' ] );
     }
+
+    /* Campaigns */
+
+    public function testCampaigns() {
+        $result = $this->iterable->campaigns();
+        $this->assertTrue( $result[ 'success' ] );
+    }
+
+    /* Commerce */
+
+    /* Email */
+
+    /* Export */
+
+    public function testExportJSON() {
+        $result = $this->iterable->export_json();
+        $this->assertTrue( $result[ 'success' ] );
+    }
+
+    public function testExportCSV() {
+        $result = $this->iterable->export_csv();
+        $this->assertTrue( $result[ 'success' ] );
+    }
+
+    /* Workflows */
 }

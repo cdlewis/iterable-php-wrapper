@@ -34,7 +34,7 @@ class Iterable {
         $url = $this->api_url . $resource . '?api_key=' . $this->api_key;
 
         if( $request == 'GET' ) {
-            $url .= $this->query_string( $params );
+            $url .= '&' . $this->query_string( $params );
         } else if( $request == 'POST' ) {
             curl_setopt( $curl_handle, CURLOPT_POSTFIELDS, $params );
             curl_setopt( $curl_handle, CURLOPT_POST, 1 );
@@ -232,12 +232,38 @@ class Iterable {
 
     /* Export */
 
-    public function export_json() {
-        throw new Exception( 'Not yet implemented' );
+    private function export( $type, $data_type_name, $range,
+        $start_date_time, $end_date_time, $omit_fields, $only_fields ) {
+
+        $request = array(
+            'dataTypeName' => $data_type_name,
+            'range' => $range
+        );
+
+        $this->set_optionals( $request, array(
+            'startDateTime' => $start_date_time,
+            'endDateTime' => $end_date_time,
+            'omitFields' => $omit_fields,
+            'onlyFields' => $only_fields
+        ) );
+
+        return $this->send_request( 'export/data.' . $type, $request );
     }
 
-    public function export_csv() {
-        throw new Exception( 'Not yet implemented' );
+    public function export_json( $data_type_name = 'user', $range = 'Today',
+        $start_date_time = false, $end_date_time = false,
+        $omit_fields = false, $only_fields = false ) {
+
+        return $this->export( 'json', $data_type_name, $range,
+            $start_date_time, $end_date_time, $omit_fields, $only_fields );
+    }
+
+    public function export_csv( $data_type_name = 'user', $range = 'Today',
+        $start_date_time = false, $end_date_time = false,
+        $omit_fields = false, $only_fields = false ) {
+
+        return $this->export( 'csv', $data_type_name, $range,
+            $start_date_time, $end_date_time, $omit_fields, $only_fields );
     }
 
     /* Workflows */
