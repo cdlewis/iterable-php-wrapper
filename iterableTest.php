@@ -4,9 +4,11 @@ require_once( dirname( __FILE__ ) . '/iterable.php' );
 
 class iterableTest extends \PHPUnit_Framework_TestCase {
     private $iterable;
+    private $instance; // for multiple concurrent tests
 
     public function __construct() {
         $this->iterable = new Iterable( getenv( 'ITERABLE_KEY' ) );
+        $this->instance = getenv( 'INSTANCE' );
     }
 
     /* Lists */
@@ -21,16 +23,18 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( $lists[ 'success' ] );
 
         if( count( $lists[ 'content' ] ) > 0 ) {
+            $email = 'test' . $this->instance . '@example.com';
             $result = $this->iterable->list_subscribe(
                 $lists[ 'content' ][ 0 ][ 'id' ],
-                array( array( 'email' => 'test@example.com' ) )
+                array( array( 'email' => $email ) )
             );
             $this->assertTrue( $result[ 'success' ] );
         }
     }
 
     public function testListUnsubscribe() {
-        $user = $this->iterable->user( 'test@example.com' );
+        $email = 'test' . $this->instance . '@example.com';
+        $user = $this->iterable->user( $email );
         $this->assertTrue( $user[ 'success' ] );
 
         if( $user[ 'success' ] ) {
@@ -53,37 +57,47 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     /* User */
 
     public function testUserGet() {
-        $user = $this->iterable->user( 'test@example.com' );
+        $email = 'test' . $this->instance . '@example.com';
+        $user = $this->iterable->user( $email );
         $this->assertTrue( $user[ 'success' ] );
     }
 
     public function testUpdateEmail() {
-        // make sure user doesn't already exist
-        $this->iterable->user_delete( 'test2@example.com' );
+        $old_email = 'test' . $this->instance . '@example.com';
+        $new_email = 'test2' . $this->instance . '@example.com';
 
-        $response = $this->iterable->user_update_email( 'test@example.com', 'test2@example.com' );
+        // make sure user doesn't already exist
+        $this->iterable->user_delete( $new_email );
+
+        $response = $this->iterable->user_update_email( $old_email,
+            $new_email );
         $this->assertTrue( $response[ 'success' ] );
     }
 
     public function testUserDelete() {
-        $response = $this->iterable->user_delete( 'test2@example.com' );
+        $new_email = 'test2' . $this->instance . '@example.com';
+        $response = $this->iterable->user_delete( $new_email );
         $this->assertTrue( $response[ 'success' ] );
     }
 
     public function testUserBulkUpdate() {
+        $email1 = 'test' . $this->instance . '@example.com';
+        $email2 = 'test2' . $this->instance . '@example.com';
+
         $response = $this->iterable->user_bulk_update( array(
-            array( 'email' => 'test1@example.com' ),
-            array( 'email' => 'test2@example.com' )
+            array( 'email' => $email1 ),
+            array( 'email' => $email2 )
         ) );
 
-        $this->iterable->user_delete( 'test1@example.com' );
-        $this->iterable->user_delete( 'test2@example.com' );
+        $this->iterable->user_delete( $email1 );
+        $this->iterable->user_delete( $email2 );
 
         $this->assertTrue( $response[ 'success' ] );
     }
 
     public function testUserUpdateSubscriptions() {
-        $response = $this->iterable->user_update_subscriptions( 'test@example.com' );
+        $email = 'test' . $this->instance . '@example.com';
+        $response = $this->iterable->user_update_subscriptions( $email );
         $this->assertTrue( $response[ 'success' ] );
     }
 }

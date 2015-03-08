@@ -10,6 +10,12 @@ php:
 env:
     global:
         secure: "KsZ87L3slkuaiDdBR6UngTLwlu2FKH4STXZwnYqZ+oVSuA7mf3DtjSDBYi2cCWy75odnDfMozV+ryvnROD6Z/i/ferb7VXfKQkD9jC49KYhGLL2KBvEj+heXGZQOOSHH8mVonKDGaD4X0kiJlIyoNrJQeYZt0RKtOxDqDSfvaMk="
+    matrix:
+        - INSTANCE=1
+        - INSTANCE=2
+        - INSTANCE=3
+        - INSTANCE=4
+        - INSTANCE=5
 
 before_script:
     - curl -s http://getcomposer.org/installer | php
