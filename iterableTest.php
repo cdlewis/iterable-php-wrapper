@@ -8,7 +8,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     public function __construct() {
         $this->iterable = new Iterable( getenv( 'ITERABLE_KEY' ) );
-        $this->instance = getenv( 'INSTANCE' );
+        $this->instance = getenv( 'TRAVIS_JOB_ID' );
     }
 
     /* Lists */
