@@ -74,6 +74,26 @@ Get all campaigns:
 $iterable->campaigns();
 ```
 
+### Commerce
+Add a purchase to a user:
+```php
+$purchases = array(
+    array(
+        'id' => '1',
+        'name' => 'widget',
+        'price' => 10,
+        'quantity' => 1
+    ),
+    array(
+        'id' => '2',
+        'name' => 'knob',
+        'price' => 10,
+        'quantity' => 1
+    )
+);
+$iterable->commerce_track_purchase( test@example.com', $purchases );
+```
+
 ### Export
 
 Export as JSON:

@@ -218,9 +218,40 @@ class Iterable {
 
     /* Commerce */
 
-    public function commerce_track_purchase( $user, $items,
+    public function commerce_track_purchase( $user, $items, $total = false,
         $campaign_id = false, $template_id = false, $data_fields = false ) {
-        throw new Exception( 'Not yet implemented' );
+
+        // create user object from email if necessary
+        if( is_string( $user ) ) {
+            $user = array( 'email' => $user );
+        }
+
+        // calculate total purchase amount if necessary
+        if( !$total ) {
+            $total = 0;
+            foreach( $items as $i ) {
+                if( isset( $i[ 'price' ] ) ) {
+                    $total += (int) $i[ 'price' ];
+                }
+            }
+        }
+
+        $request = array(
+            'user' => $user,
+            'items' => $items,
+            'total' => $total
+        );
+
+        $this->set_optionals( $request, array(
+            'campaignId' => $campaign_id,
+            'templateId' => $template_id,
+            'dataFields' => $data_fields
+        ) );
+
+        $result = $this->send_request( 'commerce/trackPurchase',
+            json_encode( $request ), 'POST' );
+
+        return $result;
     }
 
     public function commerce_update_cart( $user, $items ) {

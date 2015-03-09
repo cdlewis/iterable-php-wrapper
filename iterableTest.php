@@ -107,6 +107,31 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     /* Commerce */
 
+    public function testTrackPurchase() {
+        $user = $this->iterable->user( $this->email() );
+        if( $user[ 'success' ] ) {
+            $result = $this->iterable->commerce_track_purchase(
+                $this->email(),
+                array(
+                    array(
+                        'id' => '1',
+                        'name' => 'widget',
+                        'price' => 10,
+                        'quantity' => 1
+                    ),
+                    array(
+                        'id' => '2',
+                        'name' => 'knob',
+                        'price' => 10,
+                        'quantity' => 1
+                    )
+                )
+            );
+            $this->assertTrue( $result[ 'success' ] );
+            $this->iterable->user_delete( $this->email() );
+        }
+    }
+
     /* Email */
 
     /* Export */
