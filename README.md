@@ -5,17 +5,17 @@
 
 ## Getting Started
 
-Clone the repository
-```
+Clone the repository:
+```shell
 git clone https://github.com/cdlewis/iterable-php-wrapper.git
 ```
 
-Include the wrapper
+Include the wrapper:
 ```php
 require_once( 'iterable-php-wrapper/iterable.php' );
 ```
 
-Instantiate the class with your API key
+Instantiate the class with your API key:
 ```php
 $iterable = new Iterable( 'YOUR API KEY' );
 ```
@@ -62,9 +62,9 @@ Delete a user:
 $iterable->delete( 'john@example.com' );
 ```
 
-Get available fields for users
+Get available fields for users:
 ```php
-$iterable->user_fields()
+$iterable->user_fields();
 ```
 
 ### Campaigns
@@ -76,12 +76,12 @@ $iterable->campaigns();
 
 ### Export
 
-Export as JSON
+Export as JSON:
 ```php
 $iterable->export_json( 'user', 'All' );
 ```
 
-Export as CSV
+Export as CSV:
 ```php
 $iterable->export_csv( 'user', 'All' );
 ```
