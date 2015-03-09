@@ -32,16 +32,16 @@ $iterable->lists();
 Subscribe users to a list:
 ```php
 $iterable->list_subscribe( $list_id, array(
-	array( 'email' => john@example.com ),
-	array( 'email' => harry@example.com )
+	array( 'email' => 'john@example.com' ),
+	array( 'email' => 'harry@example.com' )
 );
 ```
 
 Unsubscribe users from a list:
 ```php
 $iterable->list_unsubscribe( $list_id, array(
-	array( 'email' => john@example.com ),
-	array( 'email' => harry@example.com )
+	array( 'email' => 'john@example.com' ),
+	array( 'email' => 'harry@example.com' )
 ) );
 ```
 
@@ -60,6 +60,11 @@ $iterable->user_update_email( 'old@example.com', 'new@example.com' );
 Delete a user:
 ```php
 $iterable->delete( 'john@example.com' );
+```
+
+Get available fields for users
+```php
+$iterable->user_fields()
 ```
 
 ### Campaigns

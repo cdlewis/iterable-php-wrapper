@@ -4,11 +4,15 @@ require_once( dirname( __FILE__ ) . '/iterable.php' );
 
 class iterableTest extends \PHPUnit_Framework_TestCase {
     private $iterable;
-    private $instance; // for multiple concurrent tests
 
     public function __construct() {
         $this->iterable = new Iterable( getenv( 'ITERABLE_KEY' ) );
-        $this->instance = getenv( 'TRAVIS_JOB_ID' );
+    }
+
+    // Generate test email strings unique to travis job (if it exists)
+    // with optional offset for differentiation
+    private function email( $offset = '' ) {
+        return getenv( 'TRAVIS_JOB_ID' ) . $offset .  'test@example.com';
     }
 
     /* Lists */
@@ -20,23 +24,18 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     public function testListSubscribe() {
         $lists = $this->iterable->lists();
-        $this->assertTrue( $lists[ 'success' ] );
 
         if( count( $lists[ 'content' ] ) > 0 ) {
-            $email = 'test' . $this->instance . '@example.com';
             $result = $this->iterable->list_subscribe(
                 $lists[ 'content' ][ 0 ][ 'id' ],
-                array( array( 'email' => $email ) )
+                array( array( 'email' => $this->email() ) )
             );
             $this->assertTrue( $result[ 'success' ] );
         }
     }
 
     public function testListUnsubscribe() {
-        $email = 'test' . $this->instance . '@example.com';
-        echo $email;
-        $user = $this->iterable->user( $email );
-        $this->assertTrue( $user[ 'success' ] );
+        $user = $this->iterable->user( $this->email() );
 
         if( $user[ 'success' ] ) {
             // make sure the user is actually subscribed to a list
@@ -58,40 +57,32 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     /* User */
 
     public function testUserGet() {
-        $email = 'test' . $this->instance . '@example.com';
-        $user = $this->iterable->user( $email );
+        $user = $this->iterable->user( $this->email() );
         $this->assertTrue( $user[ 'success' ] );
     }
 
     public function testUpdateEmail() {
-        $old_email = 'test' . $this->instance . '@example.com';
-        $new_email = 'test2' . $this->instance . '@example.com';
+        // make sure new email doesn't already exist
+        $this->iterable->user_delete( $this->email( 2 ) );
 
-        // make sure user doesn't already exist
-        $this->iterable->user_delete( $new_email );
-
-        $response = $this->iterable->user_update_email( $old_email,
-            $new_email );
+        $response = $this->iterable->user_update_email( $this->email(),
+            $this->email( 2 ) );
         $this->assertTrue( $response[ 'success' ] );
     }
 
     public function testUserDelete() {
-        $new_email = 'test2' . $this->instance . '@example.com';
-        $response = $this->iterable->user_delete( $new_email );
+        $response = $this->iterable->user_delete( $this->email( 2 ) );
         $this->assertTrue( $response[ 'success' ] );
     }
 
     public function testUserBulkUpdate() {
-        $email1 = 'test' . $this->instance . '@example.com';
-        $email2 = 'test2' . $this->instance . '@example.com';
-
         $response = $this->iterable->user_bulk_update( array(
-            array( 'email' => $email1 ),
-            array( 'email' => $email2 )
+            array( 'email' => $this->email() ),
+            array( 'email' => $this->email( 2 ) )
         ) );
 
-        $this->iterable->user_delete( $email1 );
-        $this->iterable->user_delete( $email2 );
+        $this->iterable->user_delete( $this->email() );
+        $this->iterable->user_delete( $this->email( 2 ) );
 
         $this->assertTrue( $response[ 'success' ] );
     }
@@ -102,8 +93,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testUserUpdateSubscriptions() {
-        $email = 'test' . $this->instance . '@example.com';
-        $response = $this->iterable->user_update_subscriptions( $email );
+        $response = $this->iterable->user_update_subscriptions(
+            $this->email()
+        );
         $this->assertTrue( $response[ 'success' ] );
     }
 
