@@ -19,6 +19,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     public function testLists() {
         $result = $this->iterable->lists();
+        print_r( $result );
         $this->assertTrue( $result[ 'success' ] );
     }
 
@@ -40,7 +41,6 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         if( $user[ 'success' ] ) {
             // make sure the user is actually subscribed to a list
             $list_exists = isset( $user[ 'content' ][ 'emailListIds' ] );
-            $this->assertTrue( $list_exists );
             if( !$list_exists ) {
                 break;
             }
