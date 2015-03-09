@@ -61,7 +61,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testUpdateEmail() {
-        // make sure new email doesn't already exist
+        $this->iterable->user( $this->email() );
         $this->iterable->user_delete( $this->email( 2 ) );
 
         $response = $this->iterable->user_update_email( $this->email(),
