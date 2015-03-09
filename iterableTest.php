@@ -19,7 +19,6 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     public function testLists() {
         $result = $this->iterable->lists();
-        print_r( $result );
         $this->assertTrue( $result[ 'success' ] );
     }
 
