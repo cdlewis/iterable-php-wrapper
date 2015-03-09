@@ -41,7 +41,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
             // make sure the user is actually subscribed to a list
             $list_exists = isset( $user[ 'content' ][ 'emailListIds' ] );
             if( !$list_exists ) {
-                break;
+                return;
             }
 
             foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
