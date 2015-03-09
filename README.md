@@ -91,7 +91,7 @@ $purchases = array(
         'quantity' => 1
     )
 );
-$iterable->commerce_track_purchase( test@example.com', $purchases );
+$iterable->commerce_track_purchase( 'test@example.com', $purchases );
 ```
 
 ### Export
