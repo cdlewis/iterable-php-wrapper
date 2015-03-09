@@ -59,7 +59,7 @@ $iterable->user_update_email( 'old@example.com', 'new@example.com' );
 
 Delete a user:
 ```php
-$iterable->delete( 'john@example.com' );
+$iterable->user_delete( 'john@example.com' );
 ```
 
 Get available fields for users:
