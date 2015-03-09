@@ -25,7 +25,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     public function testListSubscribe() {
         $lists = $this->iterable->lists();
 
-        if( count( $lists[ 'content' ] ) > 0 ) {
+        if( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 ) {
             $result = $this->iterable->list_subscribe(
                 $lists[ 'content' ][ 0 ][ 'id' ],
                 array( array( 'email' => $this->email() ) )
