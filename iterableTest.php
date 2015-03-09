@@ -34,6 +34,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     public function testListUnsubscribe() {
         $email = 'test' . $this->instance . '@example.com';
+        echo $email;
         $user = $this->iterable->user( $email );
         $this->assertTrue( $user[ 'success' ] );
 
@@ -93,6 +94,11 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->iterable->user_delete( $email2 );
 
         $this->assertTrue( $response[ 'success' ] );
+    }
+
+    public function testUserFields() {
+        $result = $this->iterable->user_fields();
+        $this->assertTrue( $result[ 'success' ] );
     }
 
     public function testUserUpdateSubscriptions() {

@@ -136,8 +136,12 @@ class Iterable {
         ) ), 'POST' );
 
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = get_object_vars(
-                $result[ 'content' ]->user->dataFields );
+            if( isset( $result[ 'content' ]->user->dataFields ) ) {
+                $result[ 'content' ] = get_object_vars(
+                    $result[ 'content' ]->user->dataFields );
+            } else {
+                $result[ 'content' ] = array();
+            }
         }
 
         return $result;
