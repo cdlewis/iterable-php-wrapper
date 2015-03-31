@@ -139,6 +139,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     public function testExportJSON() {
         $result = $this->iterable->export_json();
         $this->assertTrue( $result[ 'success' ] );
+        $this->assertTrue( json_decode( $result[ 'content' ] ) !== null );
     }
 
     public function testExportCSV() {

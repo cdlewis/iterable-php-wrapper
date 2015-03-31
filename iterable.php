@@ -42,36 +42,43 @@ class Iterable {
             throw new Exception( 'Invalid request parameter specified.' );
         }
 
-        if( $this->debug ) {
-            curl_setopt( $curl_handle, CURLOPT_VERBOSE, true );
-        }
-
         curl_setopt( $curl_handle, CURLOPT_URL, $url );
         curl_setopt( $curl_handle, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt( $curl_handle, CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $curl_handle, CURLOPT_SSL_VERIFYHOST, 2 );
-        curl_setopt( $curl_handle, CURLOPT_TIMEOUT, 5 );
+        curl_setopt( $curl_handle, CURLOPT_TIMEOUT, 0 );
 
         $buffer = curl_exec( $curl_handle );
 
-        if( $this->debug ) {
-            var_dump( $buffer );
-        }
-
-        $result = array(
-            'response_code' => curl_getinfo( $curl_handle,
-                CURLINFO_HTTP_CODE ),
-        );
-
-        if( $result[ 'response_code' ] === 200 ) {
-            $result[ 'success' ] = true;
-            $result[ 'content' ] = json_decode( $buffer );
+        // handle curl error
+        if( curl_errno( $curl_handle ) ) {
+            return array(
+                'success' => false,
+                'content' => curl_error( $curl_handle ),
+            );
         } else {
-            $result[ 'success' ] = false;
-            $result[ 'error_message' ] = $buffer;
-        }
+            $result = array(
+                'response_code' => curl_getinfo( $curl_handle,
+                    CURLINFO_HTTP_CODE ),
+            );
 
-        return $result;
+            if( $result[ 'response_code' ] === 200 ) {
+                $result[ 'success' ] = true;
+
+                // try to decode as json
+                $decoded_output = json_decode( $buffer, true );
+                if( $decoded_output !== null ) {
+                    $result[ 'content' ] = $decoded_output;
+                } else {
+                    $result[ 'content' ] = $buffer;
+                }
+            } else {
+                $result[ 'success' ] = false;
+                $result[ 'error_message' ] = $buffer;
+            }
+
+            return $result;
+        }
     }
 
     public function __construct( $api_key, $debug = false ) {
@@ -84,8 +91,7 @@ class Iterable {
     public function lists() {
         $result = $this->send_request( 'lists' );
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = array_map( 'get_object_vars',
-                $result[ 'content' ]->lists );
+            $result[ 'content' ] = $result[ 'content' ][ 'lists' ];
         }
 
         return $result;
@@ -137,8 +143,7 @@ class Iterable {
 
         if( $result[ 'success' ] ) {
             if( isset( $result[ 'content' ]->user->dataFields ) ) {
-                $result[ 'content' ] = get_object_vars(
-                    $result[ 'content' ]->user->dataFields );
+                $result[ 'content' ] = $result[ 'content' ][ 'user' ][ 'dataFields' ];
             } else {
                 $result[ 'content' ] = array();
             }
@@ -194,8 +199,7 @@ class Iterable {
         $result = $this->send_request( 'users/getFields' );
 
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = array_keys( get_object_vars(
-                $result[ 'content' ]->fields ) );
+            $result[ 'content' ] = $result[ 'content' ][ 'fields' ];
         }
 
         return $result;
@@ -289,8 +293,13 @@ class Iterable {
         $start_date_time = false, $end_date_time = false,
         $omit_fields = false, $only_fields = false ) {
 
-        return $this->export( 'json', $data_type_name, $range,
+        $result = $this->export( 'json', $data_type_name, $range,
             $start_date_time, $end_date_time, $omit_fields, $only_fields );
+
+        // transform into valid json
+        $result[ 'content' ] = '[' . trim( str_replace( "\n", ',', $result[ 'content' ] ), ',' ) . ']';
+
+        return $result;
     }
 
     public function export_csv( $data_type_name = 'user', $range = 'Today',
