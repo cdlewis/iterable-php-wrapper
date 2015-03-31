@@ -89,6 +89,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     public function testUserFields() {
         $result = $this->iterable->user_fields();
         $this->assertTrue( $result[ 'success' ] );
+
+        // there must be an email field
+        $this->assertTrue( ( array_search( 'email', $result[ 'content' ], true ) !== false ) );
     }
 
     public function testUserUpdateSubscriptions() {
