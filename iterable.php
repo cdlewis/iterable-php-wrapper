@@ -143,7 +143,7 @@ class Iterable {
 
         if( $result[ 'success' ] ) {
             if( isset( $result[ 'content' ]->user->dataFields ) ) {
-                $result[ 'content' ] = $result[ 'content' ][ 'user' ][ 'dataFields' ];
+                $result[ 'content' ] = array_keys( $result[ 'content' ][ 'user' ][ 'dataFields' ] );
             } else {
                 $result[ 'content' ] = array();
             }
@@ -199,7 +199,7 @@ class Iterable {
         $result = $this->send_request( 'users/getFields' );
 
         if( $result[ 'success' ] ) {
-            $result[ 'content' ] = $result[ 'content' ][ 'fields' ];
+            $result[ 'content' ] = array_keys( $result[ 'content' ][ 'fields' ] );
         }
 
         return $result;
