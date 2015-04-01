@@ -126,15 +126,39 @@ class Iterable {
 
     /* Events */
 
-    public function event_track() {
-        throw new Exception( 'Not yet implemented' );
+    public function events_track( $email, $event_name, $created_at = false,
+        $data_fields = false, $user_id = false ) {
+        $request = array(
+            'email' => $email,
+            'eventName' => $event_name,
+        );
+
+        $this->set_optionals( $request, array(
+            'createdAt' => (int) $created_at,
+            'dataFieds' => $data_fields,
+            'user_id' => $user_id
+        ) );
+
+        return $this->send_request( 'events/track',
+            json_encode( $request ), 'POST' );
     }
 
     public function event_track_conversation() {
         throw new Exception( 'Not yet implemented' );
     }
 
+    public function event_track_push_open() {
+        throw new Exception( 'Not yet implemented' );
+    }
+
     /* Users */
+
+    public function user_delete( $email ) {
+        $result = $this->send_request( 'users/delete', json_encode( array(
+            'email' => $email
+        ) ), 'POST' );
+        return $result;
+    }
 
     public function user( $email ) {
         $result = $this->send_request( 'users/get', json_encode( array(
@@ -149,13 +173,6 @@ class Iterable {
             }
         }
 
-        return $result;
-    }
-
-    public function user_delete( $email ) {
-        $result = $this->send_request( 'users/delete', json_encode( array(
-            'email' => $email
-        ) ), 'POST' );
         return $result;
     }
 
@@ -174,6 +191,10 @@ class Iterable {
             'users' => $users
         ) ), 'POST' );
         return $result;
+    }
+
+    public function event_register_device_token() {
+        throw new Exception( 'Not yet implemented' );
     }
 
     public function user_update_subscriptions( $email,
@@ -205,13 +226,33 @@ class Iterable {
         return $result;
     }
 
-    public function user_update( $email, $data_fields, $user_id ) {
-        $result = $this->send_request( 'users/update', json_encode( array(
+    public function user_update( $email = false, $data_fields = false,
+        $user_id = false ) {
+        // need either an email or user id
+        if( $email === false && $user_id === false ) {
+            throw new Exception( 'Must specify email or user ID' );
+        }
+
+        $request = array();
+        $this->set_optionals( $request, array(
             'email' => $email,
             'dataFields' => $data_fields,
-            'user_id' => $user_id
-        ) ), 'POST' );
+            'userId' => $user_id
+        ) );
+
+        $result = $this->send_request( 'users/update', 
+            json_encode( $request ), 'POST' );
         return $result;
+    }
+
+    public function user_disable_device() {
+        throw new Exception( 'Not yet implemented' );
+    }
+
+    /* Push */
+
+    public function push() {
+        throw new Exception( 'Not yet implemented' );
     }
 
     /* Campaigns */
@@ -259,7 +300,14 @@ class Iterable {
     }
 
     public function commerce_update_cart( $user, $items ) {
-        throw new Exception( 'Not yet implemented' );
+        $request = array(
+            'user' => $user,
+            'items' => $items
+        );
+        $result = $this->send_request( 'commerce/updateCart',
+            json_encode( $request ), 'POST' );
+
+        return $result;
     }
 
     /* Email */

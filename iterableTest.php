@@ -53,6 +53,16 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /* Events */
+
+    public function testEventsTrack() {
+        $user = $this->iterable->user( $this->email() );
+        $result = $this->iterable->events_track( $this->email(),
+            'test event' );
+        $this->iterable->user_delete( $this->email() );
+        $this->assertTrue( $user[ 'success' ] );
+    }
+
     /* User */
 
     public function testUserGet() {
@@ -61,12 +71,16 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testUpdateEmail() {
-        $this->iterable->user( $this->email() );
-        $this->iterable->user_delete( $this->email( 2 ) );
+        $original = $this->iterable->user_update( $this->email() );
+        $target = $this->iterable->user_delete( $this->email( 2 ) );
 
-        $response = $this->iterable->user_update_email( $this->email(),
-            $this->email( 2 ) );
-        $this->assertTrue( $response[ 'success' ] );
+        $this->assertTrue( $original[ 'success' ] && $target[ 'success' ] );
+
+        if( $original[ 'success' ] && $target[ 'success' ] ) {
+            $response = $this->iterable->user_update_email( $this->email(),
+                $this->email( 2 ) );
+            $this->assertTrue( $response[ 'success' ] );
+        }
     }
 
     public function testUserDelete() {
@@ -86,6 +100,13 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( $response[ 'success' ] );
     }
 
+    public function testUserUpdateSubscriptions() {
+        $response = $this->iterable->user_update_subscriptions(
+            $this->email()
+        );
+        $this->assertTrue( $response[ 'success' ] );
+    }
+
     public function testUserFields() {
         $result = $this->iterable->user_fields();
         $this->assertTrue( $result[ 'success' ] );
@@ -94,11 +115,10 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( ( array_search( 'email', $result[ 'content' ], true ) !== false ) );
     }
 
-    public function testUserUpdateSubscriptions() {
-        $response = $this->iterable->user_update_subscriptions(
-            $this->email()
-        );
-        $this->assertTrue( $response[ 'success' ] );
+    public function testUpdate() {
+        $result = $this->iterable->user_update( $this->email() );
+        $this->iterable->user_delete( $this->email() );
+        $this->assertTrue( $result[ 'success' ] );
     }
 
     /* Campaigns */
@@ -129,6 +149,23 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
                         'quantity' => 1
                     )
                 )
+            );
+            $this->assertTrue( $result[ 'success' ] );
+            $this->iterable->user_delete( $this->email() );
+        }
+    }
+
+    public function testUpdateCart() {
+        $user = $this->iterable->user( $this->email() );
+        if( $user[ 'success' ] ) {
+            $result = $this->iterable->commerce_update_cart(
+                array( 'email' => $this->email() ),
+                array( array(
+                    'id' => '1',
+                    'name' => 'widget',
+                    'price' => 10,
+                    'quantity' => 1
+                ) )
             );
             $this->assertTrue( $result[ 'success' ] );
             $this->iterable->user_delete( $this->email() );
