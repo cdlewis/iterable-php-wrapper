@@ -126,7 +126,7 @@ class Iterable {
 
     /* Events */
 
-    public function events_track( $email, $event_name, $created_at = false,
+    public function event_track( $email, $event_name, $created_at = false,
         $data_fields = false, $user_id = false ) {
         $request = array(
             'email' => $email,
@@ -143,7 +143,7 @@ class Iterable {
             json_encode( $request ), 'POST' );
     }
 
-    public function event_track_conversation() {
+    public function event_track_conversion() {
         throw new Exception( 'Not yet implemented' );
     }
 
@@ -193,7 +193,7 @@ class Iterable {
         return $result;
     }
 
-    public function event_register_device_token() {
+    public function user_register_device_token() {
         throw new Exception( 'Not yet implemented' );
     }
 

@@ -55,12 +55,22 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     /* Events */
 
-    public function testEventsTrack() {
+    public function testEventTrack() {
         $user = $this->iterable->user( $this->email() );
-        $result = $this->iterable->events_track( $this->email(),
+        $result = $this->iterable->event_track( $this->email(),
             'test event' );
         $this->iterable->user_delete( $this->email() );
         $this->assertTrue( $user[ 'success' ] );
+    }
+
+    public function testEventTrackConversion() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->event_track_conversion();
+    }
+
+    public function testEventTrackPushOpen() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->event_track_push_open();
     }
 
     /* User */
@@ -100,6 +110,11 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( $response[ 'success' ] );
     }
 
+    public function testUserRegisterDeviceToken() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->user_register_device_token();
+    }
+
     public function testUserUpdateSubscriptions() {
         $response = $this->iterable->user_update_subscriptions(
             $this->email()
@@ -119,6 +134,18 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $result = $this->iterable->user_update( $this->email() );
         $this->iterable->user_delete( $this->email() );
         $this->assertTrue( $result[ 'success' ] );
+    }
+
+    public function testUserDisableDevice() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->user_disable_device();
+    }
+
+    /* Push */
+
+    public function testPush() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->push();
     }
 
     /* Campaigns */
@@ -174,6 +201,11 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
     /* Email */
 
+    public function testEmail() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->email( 1, $this->email() );
+    }
+
     /* Export */
 
     public function testExportJSON() {
@@ -188,4 +220,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     /* Workflows */
+
+    public function testTriggerWorkflow() {
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->trigger_workflow();
+    }
 }
