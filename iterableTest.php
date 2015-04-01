@@ -35,7 +35,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testListUnsubscribe() {
-        $user = $this->iterable->user( $this->email() );
+        $user = $this->iterable->user_update( $this->email() );
+
+        $this->assertTrue( $user[ 'success' ] );
 
         if( $user[ 'success' ] ) {
             // make sure the user is actually subscribed to a list
@@ -51,6 +53,8 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
                 $this->assertTrue( $response[ 'success' ] );
             }
         }
+
+        $this->iterable->user_delete( $this->email() );
     }
 
     /* Events */
