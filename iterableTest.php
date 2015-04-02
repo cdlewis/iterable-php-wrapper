@@ -25,6 +25,8 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     public function testListSubscribe() {
         $lists = $this->iterable->lists();
 
+        $this->assertTrue( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 );
+
         if( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 ) {
             $result = $this->iterable->list_subscribe(
                 $lists[ 'content' ][ 0 ][ 'id' ],
@@ -35,26 +37,26 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testListUnsubscribe() {
-        $user = $this->iterable->user_update( $this->email() );
+        $lists = $this->iterable->lists();
 
-        $this->assertTrue( $user[ 'success' ] );
+        $this->assertTrue( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 );
 
-        if( $user[ 'success' ] ) {
-            // make sure the user is actually subscribed to a list
-            $list_exists = isset( $user[ 'content' ][ 'emailListIds' ] );
-            if( !$list_exists ) {
-                return;
-            }
+        if( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 ) {
+            // subscribe user to the first list we can find
+            $result = $this->iterable->list_subscribe(
+                $lists[ 'content' ][ 0 ][ 'id' ],
+                array( array( 'email' => $this->email() ) )
+            );
 
-            foreach( $user[ 'content' ][ 'emailListIds' ] as $list_id ) {
-                $response = $this->iterable->list_unsubscribe( $list_id,
-                    array( array(
-                        'email' => $user[ 'content' ][ 'email' ] ) ) );
-                $this->assertTrue( $response[ 'success' ] );
-            }
+            $this->assertTrue( $result[ 'success' ] );
+
+            $response = $this->iterable->list_unsubscribe( $list_id,
+                array( array( 'email' => $this->email() ) ) );
+
+            $this->assertTrue( $response[ 'success' ] );
+
+            $this->iterable->user_delete( $this->email() );
         }
-
-        $this->iterable->user_delete( $this->email() );
     }
 
     /* Events */
@@ -134,10 +136,13 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( ( array_search( 'email', $result[ 'content' ], true ) !== false ) );
     }
 
-    public function testUpdate() {
+    public function testUserUpdate() {
         $result = $this->iterable->user_update( $this->email() );
         $this->iterable->user_delete( $this->email() );
         $this->assertTrue( $result[ 'success' ] );
+
+        $this->setExpectedException( 'Exception' );
+        $this->iterable->user_update( false, array(), false );
     }
 
     public function testUserDisableDevice() {

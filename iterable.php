@@ -166,7 +166,7 @@ class Iterable {
         ) ), 'POST' );
 
         if( $result[ 'success' ] ) {
-            if( isset( $result[ 'content' ]->user->dataFields ) ) {
+            if( isset( $result[ 'content' ][ 'user' ][ 'dataFields' ] ) ) {
                 $result[ 'content' ] = array_keys( $result[ 'content' ][ 'user' ][ 'dataFields' ] );
             } else {
                 $result[ 'content' ] = array();
