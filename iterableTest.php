@@ -43,9 +43,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
 
         if( $lists[ 'success' ] && count( $lists[ 'content' ] ) > 0 ) {
             // subscribe user to the first list we can find
+            $list_id = $lists[ 'content' ][ 0 ][ 'id' ];
             $result = $this->iterable->list_subscribe(
-                $lists[ 'content' ][ 0 ][ 'id' ],
-                array( array( 'email' => $this->email() ) )
+                $list_id, array( array( 'email' => $this->email() ) )
             );
 
             $this->assertTrue( $result[ 'success' ] );
