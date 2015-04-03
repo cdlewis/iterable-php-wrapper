@@ -1,5 +1,8 @@
 <?php
 
+error_reporting( E_ALL );
+ini_set( 'display_errors', '1' );
+
 require_once( dirname( __FILE__ ) . '/iterable.php' );
 
 class iterableTest extends \PHPUnit_Framework_TestCase {
@@ -223,7 +226,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
         if( !isset( $result[ 'content' ] ) ) {
             trigger_error( print_r( $result, true ) );
         }
-        if( $result[ 'success' ] ) {
+        if( $result[ 'success' ] && $result[ 'content' ] !== '' ) {
             $this->assertTrue( json_decode( $result[ 'content' ] ) !== null );
         }
     }

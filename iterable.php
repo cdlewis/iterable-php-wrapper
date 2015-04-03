@@ -50,7 +50,7 @@ class Iterable {
             curl_setopt( $curl_handle, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen( $params )
-            ) ); 
+            ) );
         } else {
             throw new Exception( 'Invalid request parameter specified.' );
         }
@@ -66,7 +66,7 @@ class Iterable {
         if( curl_errno( $curl_handle ) ) {
             return array(
                 'success' => false,
-                'content' => curl_error( $curl_handle ),
+                'error_message' => curl_error( $curl_handle ),
             );
         } else {
             $result = array(
@@ -369,11 +369,7 @@ class Iterable {
             $start_date_time, $end_date_time, $omit_fields, $only_fields );
 
         // transform into valid json
-        if( $result[ 'success' ] && !isset( $result[ 'content'] ) ) { // this should never be possible
-            print_r( $result );
-            trigger_error( print_r( $result, true ), E_USER_WARNING );
-        }
-        if( $result[ 'success' ] && $result[ 'content ' ] !== '' ) {
+        if( $result[ 'success' ] && $result[ 'content' ] !== '' ) {
             $result[ 'content' ] = '[' . trim( str_replace( "\n", ',', $result[ 'content' ] ), ',' ) . ']';
         }
 
