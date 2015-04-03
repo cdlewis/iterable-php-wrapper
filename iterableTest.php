@@ -223,9 +223,6 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
     public function testExportJSON() {
         $result = $this->iterable->export_json();
         $this->assertTrue( $result[ 'success' ] );
-        if( !isset( $result[ 'content' ] ) ) {
-            trigger_error( print_r( $result, true ) );
-        }
         if( $result[ 'success' ] && $result[ 'content' ] !== '' ) {
             $this->assertTrue( json_decode( $result[ 'content' ] ) !== null );
         }
