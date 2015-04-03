@@ -124,7 +124,6 @@ class Iterable {
             $result = $this->send_request( 'lists/subscribe',
                 json_encode( $body ), 'POST' );
 
-            trigger_error( 'sending chunk of size ' . strlen( json_encode( $body ) ), E_USER_WARNING );
             if( !$result[ 'success' ] ) {
                 break;
             }
@@ -370,7 +369,9 @@ class Iterable {
             $start_date_time, $end_date_time, $omit_fields, $only_fields );
 
         // transform into valid json
-        $result[ 'content' ] = '[' . trim( str_replace( "\n", ',', $result[ 'content' ] ), ',' ) . ']';
+        if( $result[ 'content ' ] !== '' ) {
+            $result[ 'content' ] = '[' . trim( str_replace( "\n", ',', $result[ 'content' ] ), ',' ) . ']';
+        }
 
         return $result;
     }

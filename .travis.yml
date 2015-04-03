@@ -9,7 +9,7 @@ php:
 
 env:
     global:
-        secure: "KsZ87L3slkuaiDdBR6UngTLwlu2FKH4STXZwnYqZ+oVSuA7mf3DtjSDBYi2cCWy75odnDfMozV+ryvnROD6Z/i/ferb7VXfKQkD9jC49KYhGLL2KBvEj+heXGZQOOSHH8mVonKDGaD4X0kiJlIyoNrJQeYZt0RKtOxDqDSfvaMk="
+        secure: "NrjNprAwPv1ECIpfttKtxkxUfH1tXucR0KJbj40pkjWp1cetYnYIkr97X8C4MO+4hnpur1woglSaas2eV9FcTz8m/pYj5cLzFmC9NnWhUR6J7He7ACHeUnQ8bbL1qKDBeiWYvbqG4jQD3c9aFrnWYptyOZ5yb55k0+dgEna4W9Y="
 
 before_script:
     - curl -s http://getcomposer.org/installer | php
