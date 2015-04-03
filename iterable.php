@@ -369,7 +369,7 @@ class Iterable {
             $start_date_time, $end_date_time, $omit_fields, $only_fields );
 
         // transform into valid json
-        if( $result[ 'content ' ] !== '' ) {
+        if( $result[ 'success' ] && $result[ 'content ' ] !== '' ) {
             $result[ 'content' ] = '[' . trim( str_replace( "\n", ',', $result[ 'content' ] ), ',' ) . ']';
         }
 
