@@ -27,6 +27,15 @@ class Iterable {
         return implode( '&', $query_array );
     }
 
+    // iterable limits request size to 3000kb
+    private function chunk_request( $input, $max_size = 2 ) {
+        $total_length = strlen( json_encode( $input ) );
+        $max_length = $max_size * 1024 * 1024;
+        $num_chunks = ceil( $total_length / $max_length );
+
+        return array_chunk( $input, floor( count( $input ) / $num_chunks ) );
+    }
+
     private function send_request( $resource, $params = array(),
         $request = 'GET' ) {
         $curl_handle = curl_init();
@@ -38,10 +47,13 @@ class Iterable {
         } else if( $request == 'POST' ) {
             curl_setopt( $curl_handle, CURLOPT_POSTFIELDS, $params );
             curl_setopt( $curl_handle, CURLOPT_POST, 1 );
+            curl_setopt( $curl_handle, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen( $params )
+            ) ); 
         } else {
             throw new Exception( 'Invalid request parameter specified.' );
         }
-
         curl_setopt( $curl_handle, CURLOPT_URL, $url );
         curl_setopt( $curl_handle, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt( $curl_handle, CURLOPT_SSL_VERIFYPEER, false );
@@ -99,13 +111,26 @@ class Iterable {
 
     public function list_subscribe( $list_id, $subscribers,
         $resubscribe = false ) {
-        $body = array(
-            'listId' => (int) $list_id,
-            'subscribers' => $subscribers,
-            'resubscribe' => $resubscribe
-        );
-        return $this->send_request( 'lists/subscribe',
-            json_encode( $body ), 'POST' );
+
+        // avoid hitting the iterable request size limit
+        $result = array();
+        foreach( $this->chunk_request( $subscribers ) as $chunk ) {
+            $body = array(
+                'listId' => (int) $list_id,
+                'subscribers' => $chunk,
+                'resubscribe' => $resubscribe
+            );
+
+            $result = $this->send_request( 'lists/subscribe',
+                json_encode( $body ), 'POST' );
+
+            trigger_error( 'sending chunk of size ' . strlen( json_encode( $body ) ), E_USER_WARNING );
+            if( !$result[ 'success' ] ) {
+                break;
+            }
+        }
+
+        return $result;
     }
 
     public function list_unsubscribe( $list_id, $subscribers,
