@@ -37,7 +37,7 @@ class Iterable {
     }
 
     private function send_request( $resource, $params = array(),
-        $request = 'GET' ) {
+        $request = 'GET', $decode = true ) {
         $curl_handle = curl_init();
 
         $url = $this->api_url . $resource . '?api_key=' . $this->api_key;
@@ -78,7 +78,7 @@ class Iterable {
                 $result[ 'success' ] = true;
 
                 // try to decode as json
-                $decoded_output = json_decode( $buffer, true );
+                $decoded_output = $decode ? json_decode( $buffer, true ) : null;
                 if( $decoded_output !== null ) {
                     $result[ 'content' ] = $decoded_output;
                 } else {
@@ -358,7 +358,7 @@ class Iterable {
             'onlyFields' => $only_fields
         ) );
 
-        return $this->send_request( 'export/data.' . $type, $request );
+        return $this->send_request( 'export/data.' . $type, $request, 'GET', false );
     }
 
     public function export_json( $data_type_name = 'user', $range = 'Today',
