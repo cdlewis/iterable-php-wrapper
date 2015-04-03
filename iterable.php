@@ -370,6 +370,7 @@ class Iterable {
 
         // transform into valid json
         if( $result[ 'success' ] && !isset( $result[ 'content'] ) ) { // this should never be possible
+            print_r( $result );
             trigger_error( print_r( $result, true ), E_USER_WARNING );
         }
         if( $result[ 'success' ] && $result[ 'content ' ] !== '' ) {
