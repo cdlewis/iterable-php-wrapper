@@ -122,7 +122,7 @@ class Iterable {
             );
 
             $result = $this->send_request( 'lists/subscribe',
-                json_encode( $body ), 'POST' );
+                json_encode( $body, JSON_NUMERIC_CHECK ), 'POST' );
 
             if( !$result[ 'success' ] ) {
                 break;
@@ -145,7 +145,7 @@ class Iterable {
         ) );
 
         return $this->send_request( 'lists/unsubscribe',
-            json_encode( $request ), 'POST' );
+            json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
     }
 
     /* Events */
@@ -158,13 +158,13 @@ class Iterable {
         );
 
         $this->set_optionals( $request, array(
-            'createdAt' => (int) $created_at,
+            'createdAt' => $created_at,
             'dataFieds' => $data_fields,
             'user_id' => $user_id
         ) );
 
         return $this->send_request( 'events/track',
-            json_encode( $request ), 'POST' );
+            json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
     }
 
     public function event_track_conversion() {
@@ -237,7 +237,7 @@ class Iterable {
         ) );
 
         return $this->send_request( 'users/updateSubscriptions',
-            json_encode( $request ), 'POST' );
+            json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
     }
 
     public function user_fields() {
@@ -265,7 +265,7 @@ class Iterable {
         ) );
 
         $result = $this->send_request( 'users/update', 
-            json_encode( $request ), 'POST' );
+            json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
         return $result;
     }
 
@@ -312,8 +312,8 @@ class Iterable {
         );
 
         $this->set_optionals( $request, array(
-            'campaignId' => $campaign_id,
-            'templateId' => $template_id,
+            'campaignId' => (int) $campaign_id,
+            'templateId' => (int) $template_id,
             'dataFields' => $data_fields
         ) );
 
