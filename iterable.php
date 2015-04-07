@@ -191,7 +191,7 @@ class Iterable {
 
         if( $result[ 'success' ] ) {
             if( isset( $result[ 'content' ][ 'user' ][ 'dataFields' ] ) ) {
-                $result[ 'content' ] = array_keys( $result[ 'content' ][ 'user' ][ 'dataFields' ] );
+                $result[ 'content' ] = $result[ 'content' ][ 'user' ][ 'dataFields' ];
             } else {
                 $result[ 'content' ] = array();
             }
