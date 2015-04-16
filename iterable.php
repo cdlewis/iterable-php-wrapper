@@ -21,7 +21,13 @@ class Iterable {
         $query_array = array();
 
         foreach( $query as $key => $value ) {
-            $query_array[] = urlencode( $key ) . '=' . urlencode( $value );
+            if( is_array( $value ) ) {
+                foreach( $value as $v ) {
+                    $query_array[] = sprintf( '%s=%s', urlencode( $key ), urlencode( $v ) ); 
+                }
+            } else {
+                $query_array[] = sprintf( '%s=%s', urlencode( $key ), urlencode( $value ) );
+            }
         }
 
         return implode( '&', $query_array );
