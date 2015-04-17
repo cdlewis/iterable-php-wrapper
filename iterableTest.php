@@ -100,7 +100,7 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
                 $this->email( 2 ) );
             $this->assertTrue( $response[ 'success' ] );
             if( !$response[ 'success' ] ) {
-                print_r( $response );
+                trigger_error( print_r( $response, true ), E_USER_WARNING );
             }
         }
     }
