@@ -99,6 +99,9 @@ class iterableTest extends \PHPUnit_Framework_TestCase {
             $response = $this->iterable->user_update_email( $this->email(),
                 $this->email( 2 ) );
             $this->assertTrue( $response[ 'success' ] );
+            if( !$response[ 'success' ] ) {
+                print_r( $response );
+            }
         }
     }
 
