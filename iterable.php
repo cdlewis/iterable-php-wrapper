@@ -307,6 +307,27 @@ class Iterable {
 
     /* Campaigns */
 
+    public function campaigns_create( $name, $list_id, $template_id, $suppression_list_ids = false,
+        $send_at = false, $send_mode = false, $data_fields = false ) {
+
+        $request = array(
+            'name' => $name,
+            'listId' => $list_id,
+            'templateId' => $template_id
+        );
+
+        $this->set_optionals( $request, array(
+            'suppressionListIds' => $suppression_list_ids,
+            'sendAt' => $send_at,
+            'sendMode' => $send_mode,
+            'dataFields' => $dataFields
+        ) );
+
+        trigger_error( json_encode( $request, JSON_NUMERIC_CHECK ), E_USER_WARNING );
+
+        return $this->send_request( 'campaigns/create', json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
+    }
+
     public function campaigns() {
         return $this->send_request( 'campaigns' );
     }
