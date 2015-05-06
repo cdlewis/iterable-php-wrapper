@@ -246,10 +246,7 @@ public function testUpdateCart() {
  * Email Endpoint
  */
 
-public function testEmail() {
-    $this->setExpectedException( 'Exception' );
-    $this->iterable->email( 1, $this->email() );
-}
+// TODO: find a way to test /api/email/target
 
 /**
  * @group Export
