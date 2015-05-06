@@ -45,6 +45,12 @@ $iterable->list_unsubscribe( $list_id, array(
 ) );
 ```
 
+### Events
+Add an event to a user profile:
+```php
+$iterable->event_track( 'john@example.com', 'Test Event' );
+```
+
 ### Users
 
 Get a user by email:
@@ -67,11 +73,34 @@ Get available fields for users:
 $iterable->user_fields();
 ```
 
+Update multiple users at once:
+```php
+$iterable->user_bulk_update( array(
+    array( 'email' => 'john@example.com' ),
+    array( 'email' => 'mary@example.com' )
+) );
+```
+
+Update a user's subscriptions:
+```php
+$iterable->user_update_subscriptions( 'john@example.com' );
+```
+
+Update a user:
+```php
+$iterable->user_update( 'john@example.com' );
+```
+
 ### Campaigns
 
 Get all campaigns:
 ```php
 $iterable->campaigns();
+```
+
+Create a campaign:
+```php
+$iterable->campaigns_create( 'My Campaign', 1600, 1601, false, '11:00 AM' );
 ```
 
 ### Commerce
@@ -92,6 +121,24 @@ $purchases = array(
     )
 );
 $iterable->commerce_track_purchase( 'test@example.com', $purchases );
+```
+
+Update a user's cart:
+```php
+$iterable->commerce_update_cart(
+    array( 'email' => 'john@example.com' ),
+    array( array(
+        'id' => '1',
+        'name' => 'widget',
+        'price' => 10,
+        'quantity' =>1
+    ) )
+);
+```
+
+Send an email using a trigger campaign:
+```php
+$iterable->email( 1600, 'john@example.com' );
 ```
 
 ### Export

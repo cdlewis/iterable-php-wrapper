@@ -323,8 +323,6 @@ class Iterable {
             'dataFields' => $dataFields
         ) );
 
-        trigger_error( json_encode( $request, JSON_NUMERIC_CHECK ), E_USER_WARNING );
-
         return $this->send_request( 'campaigns/create', json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
     }
 
