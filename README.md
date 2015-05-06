@@ -76,8 +76,14 @@ $iterable->user_fields();
 Update multiple users at once:
 ```php
 $iterable->user_bulk_update( array(
-    array( 'email' => 'john@example.com' ),
-    array( 'email' => 'mary@example.com' )
+    array(
+        'email' => 'john@example.com',
+        'dataFields' => array( 'name' => 'Jack' )
+    ),
+    array(
+        'email' => 'mary@example.com',
+        'dataFields' => array( 'name' => 'Jane' )
+    )
 ) );
 ```
 
@@ -88,7 +94,10 @@ $iterable->user_update_subscriptions( 'john@example.com' );
 
 Update a user:
 ```php
-$iterable->user_update( 'john@example.com' );
+$iterable->user_update(
+    'john@example.com',
+    array( 'name' => 'Jack' )
+);
 ```
 
 ### Campaigns
