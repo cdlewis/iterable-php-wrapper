@@ -5,7 +5,6 @@
  */
 
 if( class_exists( 'Iterable' ) ) {
-    trigger_error( 'Unable to declare class Iterable, already exists', E_USER_WARNING );
     return;
 }
 
