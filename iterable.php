@@ -178,7 +178,7 @@ if( !class_exists( 'Iterable' ) ) {
 
         /* Events */
 
-        public function event_track( $email, $event_name, $created_at = false,
+        public function event_track( $email, $event_name, $created_at = false, $iterableEmailCampaignId = false,
             $data_fields = false, $user_id = false ) {
             $request = array(
                 'email' => $email,
@@ -187,7 +187,8 @@ if( !class_exists( 'Iterable' ) ) {
 
             $this->set_optionals( $request, array(
                 'createdAt' => (int) $created_at,
-                'dataFieds' => $data_fields,
+				'campaignId' => (int) $iterableEmailCampaignId,
+                'dataFields' => $data_fields,
                 'user_id' => $user_id
             ) );
 
