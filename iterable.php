@@ -187,10 +187,10 @@ if( !class_exists( 'Iterable' ) ) {
 
             $this->set_optionals( $request, array(
                 'createdAt' => (int) $created_at,
-		'campaignId' => (int) $campaign_id,
-		'templateId' => (int) $template_id,
                 'dataFields' => $data_fields,
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'campaignId' => (int) $campaign_id,
+                'templateId' => (int) $template_id,
             ) );
 
             return $this->send_request( 'events/track',

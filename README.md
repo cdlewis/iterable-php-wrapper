@@ -51,15 +51,17 @@ Add an event to a user profile:
 $iterable->event_track( 'john@example.com', 'Test Event' );
 ```
 
+Tie user event to a specific campaign
 ```php
 $iterable->event_track( 
-		('john@example.com',
+		'john@example.com',
 		'test event',
 		time(),
-		'iterableEmailCampaignId',
 		array(
 			'some data field' => 'some data field value'
-		)
+		),
+        false,
+		'some campaign id',
 	);
 ```
 
