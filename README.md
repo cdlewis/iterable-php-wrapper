@@ -51,6 +51,20 @@ Add an event to a user profile:
 $iterable->event_track( 'john@example.com', 'Test Event' );
 ```
 
+Tie user event to a specific campaign
+```php
+$iterable->event_track( 
+		'john@example.com',
+		'test event',
+		time(),
+		array(
+			'some data field' => 'some data field value'
+		),
+        false,
+		'some campaign id',
+	);
+```
+
 ### Users
 
 Get a user by email:
