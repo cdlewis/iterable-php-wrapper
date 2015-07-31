@@ -446,8 +446,20 @@ if( !class_exists( 'Iterable' ) ) {
 
         /* Workflows */
 
-        public function trigger_workflow() {
-            throw new Exception( 'Not yet implemented' );
+        public function trigger_workflow( $email = false, $workflow_id, $data_fields = false, $list_id = false ) {
+            $request = array(
+                'workflowId' => $workflow_id,
+            );
+
+            $this->set_optionals( $request, array(
+                'email' => $email,
+                'listId' => $list_id,
+                'dataFields' => $data_fields
+            ) );
+
+            $result = $this->send_request( 'workflows/triggerWorkflow',
+                json_encode( $request ), 'POST' );
+            return $result;
         }
     }
 }

@@ -287,8 +287,15 @@ public function testExportCSV() {
  */
 
 public function testTriggerWorkflow() {
-    $this->setExpectedException( 'Exception' );
-    $this->iterable->trigger_workflow();
+    $result = $this->iterable->trigger_workflow( 'test@example.com', 2555 );
+    if( !$result[ 'success' ] ) {
+        print_r( $result );
+    }
+
+    $result = $this->iterable->trigger_workflow( false, 2555, false, 4959 );
+    if( !$result[ 'success' ] ) {
+        print_r( $result );
+    }
 }
 
 }

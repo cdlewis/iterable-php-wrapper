@@ -175,3 +175,15 @@ Export as CSV:
 ```php
 $iterable->export_csv( 'user', 'All' );
 ```
+
+### Workflows
+
+Trigger workflow for email:
+```php
+$iterable->trigger_workflow( 'test@example.com', WORKFLOW_ID );
+```
+
+Trigger workflow for list (of emails):
+```php
+$iterable->trigger_workflow( false, WORKFLOW_ID, false, LIST_ID );
+```
