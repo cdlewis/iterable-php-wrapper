@@ -143,6 +143,11 @@ public function testUserRegisterDeviceToken() {
     $this->iterable->user_register_device_token();
 }
 
+public function testUserGetByEmail() {
+    $this->setExpectedException( 'Exception' );
+    $this->iterable->user_get_by_email( '' );
+}
+
 public function testUserUpdateSubscriptions() {
     $response = $this->iterable->user_update_subscriptions(
         $this->email()
@@ -167,6 +172,11 @@ public function testUserUpdate() {
     $this->iterable->user_update( false, array(), false );
 }
 
+public function testUserGetSentMessages() {
+    $this->setExpectedException( 'Exception' );
+    $this->iterable->user_get_sent_messages( '', '' );
+}
+
 public function testUserDisableDevice() {
     $this->setExpectedException( 'Exception' );
     $this->iterable->user_disable_device();
@@ -183,6 +193,16 @@ public function testPush() {
 }
 
 /**
+ * @group SMS
+ * SMS Endpoint
+ */
+
+public function testSMS() {
+    $this->setExpectedException( 'Exception' );
+    $this->iterable->sms( '', '' );
+}
+
+/**
  * @group Campaigns
  * Campaigns Endpoint
  */
@@ -192,11 +212,17 @@ public function testCampaigns() {
     $this->assertTrue( $result[ 'success' ] );
 }
 
-// TODO: testCampaignsCreate
+public function testCampaignsCreate() {
+    $result = $this->iterable->campaigns_create( 'Test', 5485, 26992 );
+    $this->assertTrue( $result[ 'success' ] );
+    if( !$result[ 'success' ] ) {
+        print_r( $result );
+    }
+}
 
 /**
  * @group Commerce
- * Campaigns Endpoint
+ * Commerce Endpoint
  */
 
 public function testTrackPurchase() {
@@ -288,11 +314,13 @@ public function testExportCSV() {
 
 public function testTriggerWorkflow() {
     $result = $this->iterable->trigger_workflow( 'test@example.com', 2555 );
+    $this->assertTrue( $result[ 'success' ] );
     if( !$result[ 'success' ] ) {
         print_r( $result );
     }
 
     $result = $this->iterable->trigger_workflow( false, 2555, false, 4959 );
+    $this->assertTrue( $result[ 'success' ] );
     if( !$result[ 'success' ] ) {
         print_r( $result );
     }

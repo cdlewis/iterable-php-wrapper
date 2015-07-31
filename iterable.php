@@ -269,6 +269,10 @@ if( !class_exists( 'Iterable' ) ) {
                 json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
         }
 
+        public function user_get_by_email( $email, $data_fields = false, $user_id = false ) {
+            throw new Exception( 'Not yet implemented' );
+        }
+
         public function user_fields() {
             $result = $this->send_request( 'users/getFields' );
 
@@ -298,6 +302,10 @@ if( !class_exists( 'Iterable' ) ) {
             return $result;
         }
 
+        public function user_get_sent_messages( $email, $limit, $campaign_id = false, $exclude_blast_campaigns = false, $start_date_time = false, $end_date_time = false ) {
+            throw new Exception( 'Not yet implemented' );
+        }
+
         public function user_disable_device() {
             throw new Exception( 'Not yet implemented' );
         }
@@ -308,14 +316,25 @@ if( !class_exists( 'Iterable' ) ) {
             throw new Exception( 'Not yet implemented' );
         }
 
+        /* SMS */
+
+        public function sms( $campaign_id, $recipient_email, $data_fields = false, $send_at = false ) {
+            throw new Exception( 'Not yet implemented' );
+        }
+
         /* Campaigns */
 
-        public function campaigns_create( $name, $list_id, $template_id, $suppression_list_ids = false,
+        public function campaigns_create( $name, $list_ids, $template_id, $suppression_list_ids = false,
             $send_at = false, $send_mode = false, $data_fields = false ) {
+
+            // Iterable have deprecated listId, convert to listIds
+            if( !is_array( $list_ids ) ) {
+                $list_ids = array( $list_ids );
+            }
 
             $request = array(
                 'name' => $name,
-                'listId' => $list_id,
+                'listIds' => $list_ids,
                 'templateId' => $template_id
             );
 
@@ -323,7 +342,7 @@ if( !class_exists( 'Iterable' ) ) {
                 'suppressionListIds' => $suppression_list_ids,
                 'sendAt' => $send_at,
                 'sendMode' => $send_mode,
-                'dataFields' => $dataFields
+                'dataFields' => $data_fields
             ) );
 
             return $this->send_request( 'campaigns/create', json_encode( $request, JSON_NUMERIC_CHECK ), 'POST' );
@@ -399,6 +418,10 @@ if( !class_exists( 'Iterable' ) ) {
             ) );
 
             return $this->send_request( 'email/target', json_encode( $request, JSON_NUMERIC_CHECK  ), 'POST' );
+        }
+
+        public function view_in_browser( $email, $message_id ) {
+            throw new Exception( 'Not yet implemented' );
         }
 
         /* Export */
